@@ -247,7 +247,7 @@
             border-radius: 14px;
             display: block;
             background: #ffe4e9;
-            pointer-events: none;
+            pointer-events: none; /* so click goes to parent */
         }
 
         /* ===== LIGHTBOX (Image Popup) ===== */
@@ -422,7 +422,7 @@
                 <h1 class="hero-title">
                     <span class="highlight" id="typewriter-text"></span><span id="typewriter-cursor"></span>
                 </h1>
-                <p class="sub-luck" style="margin-top:20px; font-size:1rem; font-weight:300; color:rgba(59,30,46,0.6); letter-spacing:4px; text-transform:uppercase;">Luck favors the brave</p>
+                <!-- removed "Luck favors the brave" subtitle -->
             </div>
             <div class="scroll-down">Scroll down</div>
         </section>
@@ -431,7 +431,7 @@
         <section id="section-2" class="section">
             <div class="section-inner">
                 <div class="gallery-header" id="gallery-header">
-                    <strong>luck favors the braves, and you’re the bravest</strong>
+                    <strong>Sending you pawsitive energy ✨</strong>
                 </div>
                 <div class="gallery-grid" id="gallery-grid">
                     <!-- All 9 images -->
@@ -943,20 +943,22 @@
         });
 
         // ============================================================
-        // 9. LIGHTBOX (Image zoom on click)
+        // 9. LIGHTBOX (Image zoom on click) - FIXED
         // ============================================================
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxClose = document.getElementById('lightbox-close');
 
-        // Open lightbox on image click
-        document.querySelectorAll('.gallery-item img').forEach(img => {
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                lightboxImg.src = img.src;
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
+        // Use event delegation on the grid to handle clicks on .gallery-item
+        galleryGrid.addEventListener('click', (e) => {
+            const item = e.target.closest('.gallery-item');
+            if (!item) return;
+            const img = item.querySelector('img');
+            if (!img) return;
+            // Open lightbox
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
 
         // Close lightbox functions
