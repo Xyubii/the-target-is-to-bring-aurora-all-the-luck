@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <title>Good Luck Aurora</title>
+    <title>GOOD LUCK AURORA</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,8 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
 
     <!-- Open Graph for Instagram -->
-    <meta property="og:title" content="Good Luck Aurora! You've got this!" />
-    <meta property="og:description" content="A magical 3D wish to bring you all the luck and positive energy." />
+    <meta property="og:title" content="GOOD LUCK AURORA! YOU'VE GOT THIS!" />
+    <meta property="og:description" content="A MAGICAL 3D WISH TO BRING YOU ALL THE LUCK AND POSITIVE ENERGY." />
     <meta property="og:image" content="IMG_3268.jpeg" />
     <meta property="og:url" content="YOUR_PAGE_URL_HERE" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -33,6 +33,7 @@
             overflow-x: hidden;
             overflow-y: scroll;
             scroll-behavior: smooth;
+            text-transform: uppercase;
         }
 
         /* ===== LOADING ===== */
@@ -126,6 +127,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            text-transform: uppercase;
         }
         #wishes-counter span {
             color: #ff1493;
@@ -152,7 +154,6 @@
             align-items: center;
             z-index: 99999;
             pointer-events: none;
-            /* We'll enable pointer-events only when active */;
         }
         #message-overlay.active {
             display: flex;
@@ -182,6 +183,7 @@
             pointer-events: auto;
             cursor: pointer;
             transition: transform 0.2s ease;
+            text-transform: uppercase;
         }
         #message-overlay .msg-box:hover {
             transform: scale(1.02) rotateY(2deg) rotateX(2deg);
@@ -194,6 +196,7 @@
             color: #fff;
             text-shadow: 0 0 30px rgba(255, 20, 147, 0.8), 0 0 60px rgba(255, 20, 147, 0.5), 0 4px 20px rgba(0, 0, 0, 0.3);
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
         .msg-sub {
             margin-top: 15px;
@@ -232,12 +235,14 @@
             color: #3b1e2e;
             text-shadow: 0 4px 30px rgba(255, 105, 180, 0.15);
             min-height: 1.4em;
+            text-transform: uppercase;
         }
         #section-1 .hero-title .highlight {
             background: linear-gradient(135deg, #ff1493, #ff69b4, #ff1493);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-transform: uppercase;
         }
         #typewriter-cursor {
             display: inline-block;
@@ -268,6 +273,7 @@
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.8s ease, transform 0.8s ease;
+            text-transform: uppercase;
         }
         #section-2 .gallery-header.visible {
             opacity: 1;
@@ -363,6 +369,7 @@
             border: none;
             line-height: 1;
             font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
         }
         .lightbox-close:hover {
             transform: rotate(90deg);
@@ -383,6 +390,7 @@
             opacity: 0;
             transform: scale(0.95);
             transition: all 1s ease;
+            text-transform: uppercase;
         }
         #section-3 .final-text.visible {
             opacity: 1;
@@ -400,6 +408,12 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             animation: floatDown 2s ease-in-out infinite;
+            transition: opacity 0.6s ease;
+            pointer-events: auto;
+        }
+        .scroll-down.hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
         @keyframes floatDown {
             0% {
@@ -474,7 +488,7 @@
     <!-- ===== LOADING ===== -->
     <div id="loader">
         <div class="loader-spinner"></div>
-        <div class="loader-text">Loading Magic...</div>
+        <div class="loader-text">LOADING MAGIC...</div>
     </div>
 
     <!-- ===== 3D CANVAS ===== -->
@@ -482,15 +496,15 @@
 
     <!-- ===== LUCKY CLICKS COUNTER ===== -->
     <div id="wishes-counter">
-        <span>♥</span> Lucky clicks: <span id="wish-count">0</span>
+        <span>♥</span> LUCKY CLICKS: <span id="wish-count">0</span>
     </div>
 
     <!-- ===== 3D MOTIVATIONAL MESSAGE OVERLAY ===== -->
     <div id="message-overlay">
         <div class="msg-backdrop"></div>
         <div class="msg-box" id="msg-box">
-            <div class="msg-text" id="msg-text">You got this!</div>
-            <div class="msg-sub">✨ Keep going ✨</div>
+            <div class="msg-text" id="msg-text">YOU GOT THIS!</div>
+            <div class="msg-sub">✨ KEEP GOING ✨</div>
         </div>
     </div>
 
@@ -504,14 +518,14 @@
                     <span class="highlight" id="typewriter-text"></span><span id="typewriter-cursor"></span>
                 </h1>
             </div>
-            <div class="scroll-down">Scroll down</div>
+            <div class="scroll-down" id="scroll-down">SCROLL DOWN</div>
         </section>
 
         <!-- SECTION 2: GALLERY -->
         <section id="section-2" class="section">
             <div class="section-inner">
                 <div class="gallery-header" id="gallery-header">
-                    <strong>Sending you pawsitive energy ✨</strong>
+                    <strong>SENDING YOU PAWSITIVE ENERGY ✨</strong>
                 </div>
                 <div class="gallery-grid" id="gallery-grid">
                     <div class="gallery-item"><img src="IMG_3259.jpeg" alt="Lucky charm" loading="lazy" /></div>
@@ -531,9 +545,9 @@
         <section id="section-3" class="section">
             <div class="section-inner">
                 <div class="final-text" id="final-text">
-                    You are my pride.<br />
-                    Ace that exam as always.<br />
-                    Ice cream awaits you after you crush it.
+                    YOU ARE MY PRIDE.<br />
+                    ACE THAT EXAM AS ALWAYS.<br />
+                    ICE CREAM AWAITS YOU AFTER YOU CRUSH IT.
                 </div>
             </div>
         </section>
@@ -869,15 +883,24 @@
         const msgText = document.getElementById('msg-text');
         const msgBox = document.getElementById('msg-box');
 
-        // List of motivational messages (repeats after list ends)
+        // ============================================================
+        // UPDATED MOTIVATIONAL MESSAGES - MORE POSITIVE & SUPPORTIVE
+        // ============================================================
         const motivationalMessages = [
-            "you feeling presure? YOU'LL MAKE IT LITTLE ANGEL",
-            "you'll make it baby girl, WISH YOU BEST OF LUCK, YOU'RE GAINING MORE LUCK",
+            "YOU FEELING PRESSURE? YOU'LL MAKE IT LITTLE ANGEL",
+            "YOUR MAN GOT YOUR BACK ALWAYS",
+            "I WISH YOU BEST OF LUCK, YOU'RE GAINING MORE LUCK",
+            "YOU ARE NOT ALONE, I'M ALWAYS WITH YOU",
+            "KEEP SHINING, QUEEN, NOTHING CAN STOP YOU",
+            "BELIEVE IN YOURSELF, YOU ARE CAPABLE OF ANYTHING",
             "DON'T WORRY, YOU GOT THIS!",
-            "everything will be ok u a diva keep going",
-            "i believe in u ❤️",
-            "YOU'RE GONNA ACE THIS EXAMS!",
-            "Sending you pawsitive energy!"
+            "EVERYTHING WILL BE OK, U A DIVA, KEEP GOING",
+            "I BELIEVE IN U ❤️",
+            "YOU'RE GONNA ACE THESE EXAMS!",
+            "SENDING YOU PAWSITIVE ENERGY!",
+            "YOU ARE STRONGER THAN YOU THINK",
+            "YOUR FUTURE IS BRIGHT, GO GET IT",
+            "I'M SO PROUD OF YOU, KEEP PUSHING"
         ];
 
         let isMessageShowing = false;
@@ -887,14 +910,11 @@
             if (isMessageShowing) return;
             isMessageShowing = true;
 
-            // Determine message index based on current count
-            // First message at 25 (25/25 = 1 -> index 0)
             const index = (Math.floor(wishCount / 25) - 1) % motivationalMessages.length;
             const text = motivationalMessages[index];
 
             msgText.textContent = text;
 
-            // Reset box position and opacity for fresh animation
             gsap.set(msgBox, {
                 scale: 0.2,
                 rotationY: -90,
@@ -903,10 +923,8 @@
                 transformPerspective: 800
             });
 
-            // Show overlay
             messageOverlay.classList.add('active');
 
-            // Animate in with 3D cinematic effect
             const tl = gsap.timeline({
                 defaults: { duration: 0.8, ease: "back.out(2)" }
             });
@@ -925,7 +943,6 @@
                 ease: "power2.out"
             });
 
-            // Spawn extra confetti burst specifically for the message
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
                     spawnConfetti(window.innerWidth / 2 + (Math.random() - 0.5) * 300, window.innerHeight / 2 + (Math
@@ -933,7 +950,6 @@
                 }, i * 200);
             }
 
-            // Auto-hide after 4 seconds, or on click
             clearTimeout(messageTimeout);
             messageTimeout = setTimeout(() => {
                 hideMessage();
@@ -958,27 +974,23 @@
             });
         }
 
-        // Click on message box to dismiss early
         msgBox.addEventListener('click', (e) => {
             e.stopPropagation();
             hideMessage();
         });
 
-        // Click on backdrop to dismiss (but backdrop pointer-events is none, so we handle on overlay)
         messageOverlay.addEventListener('click', (e) => {
             if (e.target === messageOverlay || e.target === document.querySelector('.msg-backdrop')) {
                 hideMessage();
             }
         });
 
-        // Spawn confetti function (reused from before)
         function spawnConfetti(clientX, clientY) {
             wishCount++;
             wishCounterEl.textContent = wishCount;
             gsap.fromTo(wishCounterEl, { scale: 1.5, color: '#ff1493' }, { scale: 1, color: '#ff1493', duration: 0.4,
                 ease: 'back.out(2)' });
 
-            // Check for motivational message trigger (every 25 clicks)
             if (wishCount % 25 === 0 && wishCount > 0) {
                 showMotivationalMessage();
             }
@@ -1050,7 +1062,6 @@
         }
 
         window.addEventListener('click', (e) => {
-            // Only trigger if not clicking on lightbox or message box (handled separately)
             if (lightbox.classList.contains('active')) return;
             if (messageOverlay.classList.contains('active')) return;
             spawnConfetti(e.clientX, e.clientY);
@@ -1068,7 +1079,20 @@
         // ============================================================
         ScrollTrigger.refresh();
 
-        // Typewriter
+        // --- Hide Scroll Down when leaving section 1 ---
+        const scrollDown = document.getElementById('scroll-down');
+        ScrollTrigger.create({
+            trigger: '#section-1',
+            start: 'bottom center',
+            onEnter: () => {
+                scrollDown.classList.add('hidden');
+            },
+            onEnterBack: () => {
+                scrollDown.classList.remove('hidden');
+            }
+        });
+
+        // --- Typewriter (UPPERCASE) ---
         const typewriterText = document.getElementById('typewriter-text');
         const phrases = [
             "you got this baby girl",
@@ -1082,7 +1106,7 @@
         function typeWriter() {
             const currentPhrase = phrases[phraseIndex];
             if (isDeleting) {
-                typewriterText.textContent = currentPhrase.substring(0, charIndex - 1);
+                typewriterText.textContent = currentPhrase.substring(0, charIndex - 1).toUpperCase();
                 charIndex--;
                 if (charIndex === 0) {
                     isDeleting = false;
@@ -1095,7 +1119,7 @@
                 }
                 setTimeout(typeWriter, 40);
             } else {
-                typewriterText.textContent = currentPhrase.substring(0, charIndex + 1);
+                typewriterText.textContent = currentPhrase.substring(0, charIndex + 1).toUpperCase();
                 charIndex++;
                 if (charIndex === currentPhrase.length) {
                     isDeleting = true;
@@ -1107,7 +1131,7 @@
         }
         setTimeout(typeWriter, 800);
 
-        // Gallery
+        // --- Gallery ---
         const galleryHeader = document.getElementById('gallery-header');
         const galleryGrid = document.getElementById('gallery-grid');
 
@@ -1124,7 +1148,7 @@
             }
         });
 
-        // Final text
+        // --- Final text ---
         const finalText = document.getElementById('final-text');
         ScrollTrigger.create({
             trigger: '#section-3',
@@ -1254,7 +1278,7 @@
             document.getElementById('loader').classList.add('hidden');
         }, 1500);
 
-        console.log('Sushi magic loaded! Good luck to Aurora!');
+        console.log('SUSHI MAGIC LOADED! GOOD LUCK TO AURORA!');
     </script>
 </body>
 </html>
