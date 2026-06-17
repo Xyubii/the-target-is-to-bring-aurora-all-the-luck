@@ -12,7 +12,7 @@
 
     <!-- Open Graph for Instagram -->
     <meta property="og:title" content="Good Luck Aurora! You've got this!" />
-    <meta property="og:description" content="A magical 3D wish to bring you all the luck and positive energy for your exams." />
+    <meta property="og:description" content="A magical 3D wish to bring you all the luck and positive energy." />
     <meta property="og:image" content="IMG_3268.jpeg" />
     <meta property="og:url" content="YOUR_PAGE_URL_HERE" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -142,19 +142,19 @@
 
         /* ===== SECTIONS ===== */
         .section {
-            height: 100vh;
+            min-height: 100vh;
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
             pointer-events: none;
         }
 
         .section-inner {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
             padding: 20px;
             pointer-events: auto;
@@ -194,69 +194,115 @@
             }
         }
 
-        .sub-luck {
-            margin-top: 20px;
-            font-size: 1rem;
-            font-weight: 300;
-            color: rgba(59, 30, 46, 0.6);
-            letter-spacing: 4px;
-            text-transform: uppercase;
+        /* ===== SECTION 2: GALLERY ===== */
+        #section-2 .gallery-header {
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: #3b1e2e;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        #section-2 .gallery-header.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #section-2 .gallery-header strong {
+            color: #ff1493;
+            font-weight: 700;
         }
 
-        /* ===== SECTION 2: LUCKY CARD + IMAGE ===== */
-        #section-2 .lucky-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 182, 193, 0.4);
-            border-radius: 40px;
-            padding: 35px 30px;
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.12);
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+            padding: 10px;
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 0.9s ease, transform 0.9s ease;
         }
-        #section-2 .lucky-card.visible {
+        .gallery-grid.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        #section-2 .lucky-card .lucky-text {
-            font-size: 1.4rem;
-            font-weight: 400;
-            color: #3b1e2e;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-        #section-2 .lucky-card .lucky-text strong {
-            color: #ff1493;
-            font-weight: 600;
-        }
-        .clickable-image-wrapper {
-            display: inline-block;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 12px 40px rgba(255, 105, 180, 0.2);
+        .gallery-item {
+            background: white;
+            border-radius: 20px;
+            padding: 8px 8px 16px 8px;
+            box-shadow: 0 10px 35px rgba(255, 105, 180, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 182, 193, 0.25);
             cursor: pointer;
-            max-width: 280px;
-            width: 100%;
-            border: 3px solid rgba(255, 255, 255, 0.8);
         }
-        .clickable-image-wrapper:hover {
-            transform: scale(1.03);
-            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.35);
+        .gallery-item:hover {
+            transform: scale(1.04) rotate(-1deg);
+            box-shadow: 0 20px 50px rgba(255, 105, 180, 0.25);
         }
-        .clickable-image-wrapper img {
+        .gallery-item img {
             width: 100%;
-            display: block;
             aspect-ratio: 1 / 1;
             object-fit: cover;
+            border-radius: 14px;
+            display: block;
             background: #ffe4e9;
+            pointer-events: none;
         }
-        .click-hint {
-            margin-top: 14px;
-            font-size: 0.8rem;
-            color: rgba(59, 30, 46, 0.5);
-            letter-spacing: 1px;
+
+        /* ===== LIGHTBOX (Image Popup) ===== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 15, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9998;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            object-fit: contain;
+            background: white;
+            padding: 4px;
+        }
+        .lightbox.active .lightbox-content {
+            transform: scale(1);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 3rem;
+            font-weight: 300;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+            z-index: 9999;
+            background: none;
+            border: none;
+            line-height: 1;
+            font-family: 'Poppins', sans-serif;
+        }
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+            color: #ff69b4;
         }
 
         /* ===== SECTION 3: FINAL ===== */
@@ -320,19 +366,33 @@
             #wish-count {
                 font-size: 18px;
             }
-            #section-2 .lucky-card .lucky-text {
-                font-size: 1.1rem;
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 14px;
             }
-            .clickable-image-wrapper {
-                max-width: 220px;
+            #section-2 .gallery-header {
+                font-size: 1.2rem;
+            }
+            .lightbox-close {
+                top: 20px;
+                right: 25px;
+                font-size: 2.5rem;
             }
         }
         @media (max-width: 480px) {
             .section {
-                padding: 15px;
+                padding: 20px 12px;
             }
-            .clickable-image-wrapper {
-                max-width: 180px;
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            .gallery-item {
+                padding: 5px 5px 12px 5px;
+            }
+            .lightbox-content {
+                max-width: 95%;
+                max-height: 85%;
             }
         }
     </style>
@@ -362,24 +422,28 @@
                 <h1 class="hero-title">
                     <span class="highlight" id="typewriter-text"></span><span id="typewriter-cursor"></span>
                 </h1>
-                <p class="sub-luck">Luck favors the brave</p>
+                <p class="sub-luck" style="margin-top:20px; font-size:1rem; font-weight:300; color:rgba(59,30,46,0.6); letter-spacing:4px; text-transform:uppercase;">Luck favors the brave</p>
             </div>
             <div class="scroll-down">Scroll down</div>
         </section>
 
-        <!-- SECTION 2: LUCKY CARD + IMAGE -->
+        <!-- SECTION 2: GALLERY -->
         <section id="section-2" class="section">
             <div class="section-inner">
-                <div class="lucky-card" id="lucky-card">
-                    <div class="lucky-text">
-                        This sushi is your lucky charm.<br />
-                        It brings you <strong>focus, calm, and success</strong>.<br />
-                        Every click spreads more luck your way.
-                    </div>
-                    <a href="IMG_3268.jpeg" target="_blank" class="clickable-image-wrapper" title="Click to view full size">
-                        <img src="IMG_3268.jpeg" alt="Your lucky charm" loading="lazy" />
-                    </a>
-                    <div class="click-hint">Click the image to open it fully</div>
+                <div class="gallery-header" id="gallery-header">
+                    <strong>luck favors the braves, and you’re the bravest</strong>
+                </div>
+                <div class="gallery-grid" id="gallery-grid">
+                    <!-- All 9 images -->
+                    <div class="gallery-item"><img src="IMG_3259.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3260.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3261.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3264.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3265.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3266.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3267.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3268.jpeg" alt="Lucky charm" loading="lazy" /></div>
+                    <div class="gallery-item"><img src="IMG_3269.jpeg" alt="Lucky charm" loading="lazy" /></div>
                 </div>
             </div>
         </section>
@@ -395,6 +459,12 @@
             </div>
         </section>
 
+    </div>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" id="lightbox-close">×</button>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="Enlarged view" />
     </div>
 
     <!-- ===== THREE.JS IMPORT MAP ===== -->
@@ -481,7 +551,7 @@
         scene.add(glowLight);
 
         // ============================================================
-        // 5. 3D SUSHI (instead of clover)
+        // 5. 3D SUSHI (keeping the sushi as requested)
         // ============================================================
 
         // --- 5a. Background Stars (Pink/White) ---
@@ -514,49 +584,30 @@
         const stars = new THREE.Points(starGeo, starMat);
         scene.add(stars);
 
-        // --- 5b. Main Sushi Group ---
+        // --- 5b. Sushi Group ---
         const sushiGroup = new THREE.Group();
 
-        // Helper to create a Nigiri piece
         function createNigiri(colorFish = 0xff8c69, offsetX = 0, offsetZ = 0) {
             const group = new THREE.Group();
-
-            // Rice
             const riceGeo = new THREE.CylinderGeometry(0.45, 0.55, 0.25, 16);
-            const riceMat = new THREE.MeshStandardMaterial({
-                color: 0xfff5e6,
-                roughness: 0.9,
-                metalness: 0
-            });
+            const riceMat = new THREE.MeshStandardMaterial({ color: 0xfff5e6, roughness: 0.9, metalness: 0 });
             const rice = new THREE.Mesh(riceGeo, riceMat);
             rice.position.y = 0;
             group.add(rice);
 
-            // Fish (Salmon / Tuna)
             const fishGeo = new THREE.SphereGeometry(0.48, 16, 16);
-            const fishMat = new THREE.MeshStandardMaterial({
-                color: colorFish,
-                roughness: 0.3,
-                metalness: 0.1,
-                emissive: colorFish,
-                emissiveIntensity: 0.08
-            });
+            const fishMat = new THREE.MeshStandardMaterial({ color: colorFish, roughness: 0.3, metalness: 0.1,
+                emissive: colorFish, emissiveIntensity: 0.08 });
             const fish = new THREE.Mesh(fishGeo, fishMat);
             fish.scale.set(1, 0.2, 0.65);
             fish.position.y = 0.22;
             group.add(fish);
 
-            // Nori (Seaweed strip)
             const noriGeo = new THREE.BoxGeometry(0.03, 0.28, 0.7);
-            const noriMat = new THREE.MeshStandardMaterial({
-                color: 0x1a3a1a,
-                roughness: 0.9
-            });
+            const noriMat = new THREE.MeshStandardMaterial({ color: 0x1a3a1a, roughness: 0.9 });
             const nori = new THREE.Mesh(noriGeo, noriMat);
             nori.position.set(0.5, 0.1, 0);
             group.add(nori);
-
-            // Second Nori strip on the other side
             const nori2 = nori.clone();
             nori2.position.set(-0.5, 0.1, 0);
             group.add(nori2);
@@ -565,75 +616,52 @@
             return group;
         }
 
-        // Helper to create a Maki roll
         function createMaki(offsetX = 0, offsetZ = 0) {
             const group = new THREE.Group();
-            // Rice cylinder
             const riceGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.3, 12);
-            const riceMat = new THREE.MeshStandardMaterial({
-                color: 0xfff5e6,
-                roughness: 0.8
-            });
+            const riceMat = new THREE.MeshStandardMaterial({ color: 0xfff5e6, roughness: 0.8 });
             const rice = new THREE.Mesh(riceGeo, riceMat);
             rice.rotation.x = Math.PI / 2;
             rice.position.y = 0;
             group.add(rice);
 
-            // Nori wrapper (thin cylinder)
             const noriGeo = new THREE.CylinderGeometry(0.27, 0.27, 0.32, 12);
-            const noriMat = new THREE.MeshStandardMaterial({
-                color: 0x1a3a1a,
-                roughness: 0.9,
-                wireframe: false,
-                transparent: true,
-                opacity: 0.6
-            });
+            const noriMat = new THREE.MeshStandardMaterial({ color: 0x1a3a1a, roughness: 0.9, transparent: true,
+                opacity: 0.6 });
             const nori = new THREE.Mesh(noriGeo, noriMat);
             nori.rotation.x = Math.PI / 2;
             nori.position.y = 0;
             group.add(nori);
 
-            // Inside filling (small colored spheres)
             const fillColors = [0xff6347, 0x32cd32, 0xffa500];
             for (let i = 0; i < 3; i++) {
                 const fGeo = new THREE.SphereGeometry(0.06, 6, 6);
-                const fMat = new THREE.MeshStandardMaterial({
-                    color: fillColors[i % fillColors.length],
-                    roughness: 0.5
-                });
+                const fMat = new THREE.MeshStandardMaterial({ color: fillColors[i % fillColors.length], roughness: 0.5 });
                 const f = new THREE.Mesh(fGeo, fMat);
                 const angle = (i / 3) * Math.PI * 2;
                 f.position.set(Math.cos(angle) * 0.12, 0, Math.sin(angle) * 0.12);
                 group.add(f);
             }
-
             group.position.set(offsetX, 0.15, offsetZ);
             group.rotation.y = Math.random() * Math.PI;
             return group;
         }
 
-        // Build the sushi platter
-        const nigiriMain = createNigiri(0xff8c69, 0, 0); // Salmon
+        const nigiriMain = createNigiri(0xff8c69, 0, 0);
         sushiGroup.add(nigiriMain);
-
-        const nigiriSide1 = createNigiri(0xff4d4d, 0.9, 0.6); // Tuna
+        const nigiriSide1 = createNigiri(0xff4d4d, 0.9, 0.6);
         nigiriSide1.scale.set(0.8, 0.8, 0.8);
         sushiGroup.add(nigiriSide1);
-
-        const nigiriSide2 = createNigiri(0xffb347, -0.9, -0.6); // Orange
+        const nigiriSide2 = createNigiri(0xffb347, -0.9, -0.6);
         nigiriSide2.scale.set(0.8, 0.8, 0.8);
         sushiGroup.add(nigiriSide2);
-
-        // Maki rolls
         const maki1 = createMaki(1.1, -0.5);
         maki1.scale.set(0.9, 0.9, 0.9);
         sushiGroup.add(maki1);
-
         const maki2 = createMaki(-1.1, 0.5);
         maki2.scale.set(0.9, 0.9, 0.9);
         sushiGroup.add(maki2);
 
-        // Small floating chopsticks (decorative)
         const stickMat = new THREE.MeshStandardMaterial({ color: 0xdeb887, roughness: 0.7 });
         for (let i = -1; i <= 1; i += 2) {
             const stick = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.03, 0.8, 6), stickMat);
@@ -642,11 +670,10 @@
             stick.rotation.z = i * 0.1;
             sushiGroup.add(stick);
         }
-
         sushiGroup.position.y = 0.0;
         scene.add(sushiGroup);
 
-        // --- 5c. Floating Hearts (Pink) around sushi ---
+        // --- 5c. Floating Hearts ---
         const hearts = [];
 
         function createHeart3D() {
@@ -656,24 +683,13 @@
             shape.bezierCurveTo(-1.2, 0.5, -0.6, 0.9, 0, 1.6);
             shape.bezierCurveTo(0.6, 0.9, 1.2, 0.5, 0.9, 0);
             shape.bezierCurveTo(0.6, -0.5, 0, -0.3, 0, 0);
-            const extrudeSettings = {
-                steps: 1,
-                depth: 0.15,
-                bevelEnabled: true,
-                bevelThickness: 0.1,
-                bevelSize: 0.05,
-                bevelSegments: 3
-            };
+            const extrudeSettings = { steps: 1, depth: 0.15, bevelEnabled: true, bevelThickness: 0.1, bevelSize: 0.05,
+                bevelSegments: 3 };
             const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
             const hue = 0.93 + Math.random() * 0.05;
             const color = new THREE.Color().setHSL(hue, 0.9, 0.65);
-            const material = new THREE.MeshStandardMaterial({
-                color: color,
-                metalness: 0.1,
-                roughness: 0.2,
-                emissive: color,
-                emissiveIntensity: 0.15
-            });
+            const material = new THREE.MeshStandardMaterial({ color, metalness: 0.1, roughness: 0.2, emissive: color,
+                emissiveIntensity: 0.15 });
             const heart = new THREE.Mesh(geometry, material);
             heart.scale.set(0.2, 0.2, 0.2);
             return heart;
@@ -684,24 +700,15 @@
             const heart = createHeart3D();
             const angle = (i / heartCount) * Math.PI * 2;
             const radius = 2.0 + Math.random() * 0.5;
-            heart.userData = {
-                angle: angle,
-                radius: radius,
-                speed: 0.25 + Math.random() * 0.2,
-                offsetY: (Math.random() - 0.5) * 1.6,
-                phase: Math.random() * Math.PI * 2
-            };
-            heart.position.set(
-                Math.cos(angle) * radius,
-                0.4 + Math.sin(angle * 2) * 0.3,
-                Math.sin(angle) * radius
-            );
+            heart.userData = { angle, radius, speed: 0.25 + Math.random() * 0.2, offsetY: (Math.random() - 0.5) * 1.6,
+                phase: Math.random() * Math.PI * 2 };
+            heart.position.set(Math.cos(angle) * radius, 0.4 + Math.sin(angle * 2) * 0.3, Math.sin(angle) * radius);
             heart.lookAt(0, 0.4, 0);
             scene.add(heart);
             hearts.push(heart);
         }
 
-        // --- 5d. Particle Halo (White / Pink) ---
+        // --- 5d. Particle Halo ---
         const haloParticlesGeo = new THREE.BufferGeometry();
         const haloCount = 700;
         const haloPositions = new Float32Array(haloCount * 3);
@@ -740,7 +747,6 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('♥', 32, 34);
-
         const particleTexture = new THREE.CanvasTexture(canvas);
 
         const haloMat = new THREE.PointsMaterial({
@@ -877,7 +883,6 @@
         let phraseIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        let lineBreak = false;
 
         function typeWriter() {
             const currentPhrase = phrases[phraseIndex];
@@ -887,7 +892,6 @@
                 if (charIndex === 0) {
                     isDeleting = false;
                     phraseIndex = (phraseIndex + 1) % phrases.length;
-                    // Add line break if not last
                     if (phraseIndex !== 0) {
                         typewriterText.innerHTML += '<br />';
                     }
@@ -908,16 +912,20 @@
         }
         setTimeout(typeWriter, 800);
 
-        // Lucky Card
-        const luckyCard = document.getElementById('lucky-card');
+        // Gallery header & grid
+        const galleryHeader = document.getElementById('gallery-header');
+        const galleryGrid = document.getElementById('gallery-grid');
+
         ScrollTrigger.create({
             trigger: '#section-2',
             start: 'top center',
             onEnter: () => {
-                luckyCard.classList.add('visible');
+                galleryHeader.classList.add('visible');
+                galleryGrid.classList.add('visible');
             },
             onEnterBack: () => {
-                luckyCard.classList.add('visible');
+                galleryHeader.classList.add('visible');
+                galleryGrid.classList.add('visible');
             }
         });
 
@@ -935,7 +943,50 @@
         });
 
         // ============================================================
-        // 9. RESIZE
+        // 9. LIGHTBOX (Image zoom on click)
+        // ============================================================
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
+
+        // Open lightbox on image click
+        document.querySelectorAll('.gallery-item img').forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close lightbox functions
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Reset src after transition to avoid flicker
+            setTimeout(() => {
+                if (!lightbox.classList.contains('active')) {
+                    lightboxImg.src = '';
+                }
+            }, 400);
+        }
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // ============================================================
+        // 10. RESIZE
         // ============================================================
         window.addEventListener('resize', () => {
             const w = window.innerWidth;
@@ -947,7 +998,7 @@
         });
 
         // ============================================================
-        // 10. ANIMATION LOOP
+        // 11. ANIMATION LOOP
         // ============================================================
         let clock = new THREE.Clock();
 
@@ -962,7 +1013,7 @@
             camera.position.y += (target.y * 0.5 + 1 - camera.position.y) * 0.02;
             camera.lookAt(0, 0.4, 0);
 
-            // Sushi group rotation & floating
+            // Sushi
             sushiGroup.rotation.y += 0.003;
             sushiGroup.position.y = Math.sin(elapsed * 0.3) * 0.05;
             const pulse = Math.sin(elapsed * 1.5) * 0.3 + 0.7;
@@ -1009,7 +1060,7 @@
         animate();
 
         // ============================================================
-        // 11. HIDE LOADER
+        // 12. HIDE LOADER
         // ============================================================
         setTimeout(() => {
             document.getElementById('loader').classList.add('hidden');
