@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Good Luck Aurora ✨</title>
+
+    <!-- ========== FONTS ========== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- ========== OPEN GRAPH (FOR INSTAGRAM / SOCIAL SHARING) ========== -->
+    <meta property="og:title" content="✨ Good Luck Aurora! You've got this! ✨" />
+    <meta property="og:description" content="A magical 3D wish to bring you all the luck and positive energy for your exams. Ace it!" />
+    <meta property="og:image" content="YOUR_IMAGE_LINK_HERE" />  <!-- CHANGE THIS TO YOUR IMAGE URL -->
+    <meta property="og:url" content="YOUR_PAGE_URL_HERE" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="YOUR_IMAGE_LINK_HERE" /> <!-- CHANGE THIS TO YOUR IMAGE URL -->
+
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background: #0a0515;
+            color: #fff;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+
+        /* ========== LOADING SCREEN ========== */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0515;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-spinner {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 215, 0, 0.1);
+            border-top: 4px solid #ffd700;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        .loader-text {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            color: #ffd700;
+            text-transform: uppercase;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+        /* ========== 3D CANVAS ========== */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none; /* We handle clicks on overlay */
+        }
+
+        /* ========== CONTENT OVERLAY ========== */
+        .content {
+            position: relative;
+            z-index: 1;
+            pointer-events: none; /* So clicks pass to our click handler if needed, but we'll capture on window */
+        }
+
+        /* ========== WISHES COUNTER (Top Right) ========== */
+        #wishes-counter {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            pointer-events: none;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #wishes-counter span {
+            color: #ffd700;
+            font-size: 20px;
+            margin-right: 4px;
+        }
+        #wish-count {
+            color: #ffd700;
+            font-size: 22px;
+            font-weight: 700;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        /* ========== SECTIONS (SCROLL PAGES) ========== */
+        .section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            pointer-events: none; /* buttons/links inside can be enabled if needed, but for click effects we use window */
+        }
+
+        .section-inner {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            pointer-events: auto; /* Allow selecting text, but click will still bubble */
+        }
+
+        /* ========== SECTION 1: HERO ========== */
+        #section-1 .hero-title {
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            min-height: 1.4em;
+        }
+        #section-1 .hero-title .highlight {
+            background: linear-gradient(135deg, #ffd700, #ffb300, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        #typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #ffd700;
+            margin-left: 5px;
+            vertical-align: text-bottom;
+            animation: blink 0.8s step-end infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .sub-luck {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+
+        /* ========== SECTION 2: GLASS CARD ========== */
+        #section-2 .glass-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        #section-2 .glass-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #section-2 .glass-card h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        #section-2 .glass-card .tips {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        #section-2 .glass-card .tip-item {
+            font-size: 1.4rem;
+            font-weight: 400;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            border-left: 4px solid #ffd700;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+        }
+        #section-2 .glass-card .tip-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        #section-2 .glass-card .tip-item .icon {
+            margin-right: 15px;
+        }
+
+        /* ========== SECTION 3: FINAL ========== */
+        #section-3 .final-text {
+            font-size: clamp(1.8rem, 5vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.4;
+            text-shadow: 0 0 60px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(145deg, #ffffff 0%, #ffd700 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1s ease;
+        }
+        #section-3 .final-text.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        #section-3 .countdown-box {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            padding: 20px 40px;
+            border-radius: 60px;
+            display: inline-block;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        #section-3 .countdown-box strong {
+            color: #ffd700;
+            font-size: 2rem;
+            margin: 0 5px;
+        }
+
+        /* ========== SCROLL INDICATOR ========== */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 215, 0, 0.4);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: floatDown 2s ease-in-out infinite;
+        }
+        @keyframes floatDown {
+            0% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+            50% { transform: translateX(-50%) translateY(10px); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            #section-2 .glass-card .tip-item { font-size: 1.1rem; padding: 12px 16px; }
+            #wishes-counter { font-size: 12px; padding: 6px 14px; top: 15px; right: 15px; }
+            #wishes-counter span { font-size: 16px; }
+            #wish-count { font-size: 18px; }
+        }
+        @media (max-width: 480px) {
+            .section { padding: 15px; }
+            #section-2 .glass-card { padding: 25px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== LOADING SCREEN ========== -->
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Loading Magic...</div>
+    </div>
+
+    <!-- ========== 3D CANVAS CONTAINER ========== -->
+    <div id="canvas-container"></div>
+
+    <!-- ========== WISHES COUNTER ========== -->
+    <div id="wishes-counter">
+        <span>✨</span> Wishes: <span id="wish-count">0</span>
+    </div>
+
+    <!-- ========== CONTENT OVERLAY ========== -->
+    <div class="content">
+
+        <!-- SECTION 1: HERO -->
+        <section id="section-1" class="section">
+            <div class="section-inner">
+                <h1 class="hero-title" id="typewriter-target">
+                    <span class="highlight">You are stronger</span>
+                    <span id="typewriter-text"></span><span id="typewriter-cursor"></span>
+                </h1>
+                <p class="sub-luck">⚡ Luck favors the brave ⚡</p>
+            </div>
+            <div class="scroll-down">Scroll ↓</div>
+        </section>
+
+        <!-- SECTION 2: GLASS CARD -->
+        <section id="section-2" class="section">
+            <div class="section-inner">
+                <div class="glass-card" id="glass-card">
+                    <h2>🌿 Breathe. Believe. Conquer.</h2>
+                    <div class="tips">
+                        <div class="tip-item" data-delay="0"><span class="icon">🧘</span> Take a deep breath</div>
+                        <div class="tip-item" data-delay="200"><span class="icon">🧠</span> Trust your memory</div>
+                        <div class="tip-item" data-delay="400"><span class="icon">⭐</span> You are amazing</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FINAL -->
+        <section id="section-3" class="section">
+            <div class="section-inner">
+                <div class="final-text" id="final-text">
+                    You are my pride, ace that exam as always...<br>
+                    Ice cream awaits you after you crush it! 💫
+                </div>
+                <div class="countdown-box">
+                    📅 <strong id="countdown-days">--</strong> days to go
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ========== IMPORT MAP (THREE.JS) ========== -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- ========== MAIN SCRIPT (MODULE) ========== -->
+    <script type="module">
+        // ================================================================
+        // 1. IMPORTS
+        // ================================================================
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        import gsap from 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm';
+        import { ScrollTrigger } from 'https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js';
+
+        // Register GSAP plugins
+        gsap.registerPlugin(ScrollTrigger);
+
+        // ================================================================
+        // 2. SETUP SCENE, CAMERA, RENDERER
+        // ================================================================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0515); // Deep Purple/Navy
+        scene.fog = new THREE.Fog(0x0a0515, 8, 20);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1, 6);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        container.appendChild(renderer.domElement);
+
+        // ================================================================
+        // 3. POST PROCESSING - BLOOM
+        // ================================================================
+        const composer = new EffectComposer(renderer);
+        const renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            0.8, // strength
+            0.4, // radius
+            0.1 // threshold
+        );
+        composer.addPass(bloomPass);
+
+        // ================================================================
+        // 4. LIGHTS
+        // ================================================================
+        const ambientLight = new THREE.AmbientLight(0x222244, 0.5);
+        scene.add(ambientLight);
+
+        const mainLight = new THREE.DirectionalLight(0xffd700, 2);
+        mainLight.position.set(2, 5, 5);
+        scene.add(mainLight);
+
+        const fillLight = new THREE.DirectionalLight(0x4466ff, 0.8);
+        fillLight.position.set(-3, 1, -2);
+        scene.add(fillLight);
+
+        const rimLight = new THREE.DirectionalLight(0xffaa88, 1.5);
+        rimLight.position.set(0, -2, 4);
+        scene.add(rimLight);
+
+        // Point light near clover for glow
+        const glowLight = new THREE.PointLight(0xffd700, 1.5, 10);
+        glowLight.position.set(0, 0.5, 1);
+        scene.add(glowLight);
+
+        // ================================================================
+        // 5. CREATE 3D OBJECTS
+        // ================================================================
+
+        // --- 5a. Background Stars (Particles) ---
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 2000;
+        const starPos = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount * 3; i += 3) {
+            const r = 15 + Math.random() * 30;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            starPos[i] = r * Math.sin(phi) * Math.cos(theta);
+            starPos[i+1] = r * Math.sin(phi) * Math.sin(theta);
+            starPos[i+2] = r * Math.cos(phi);
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        const starMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.15,
+            transparent: true,
+            opacity: 0.7,
+            blending: THREE.AdditiveBlending
+        });
+        const stars = new THREE.Points(starGeo, starMat);
+        scene.add(stars);
+
+        // --- 5b. Four-Leaf Clover (Gold) ---
+        const cloverGroup = new THREE.Group();
+
+        // Leaf shape
+        function createLeaf() {
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.bezierCurveTo(0.6, 0.4, 0.8, 1.0, 0, 1.6);
+            shape.bezierCurveTo(-0.8, 1.0, -0.6, 0.4, 0, 0);
+            const extrudeSettings = {
+                steps: 2,
+                depth: 0.08,
+                bevelEnabled: true,
+                bevelThickness: 0.08,
+                bevelSize: 0.05,
+                bevelSegments: 4
+            };
+            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xffd700,
+                metalness: 0.85,
+                roughness: 0.2,
+                emissive: 0xbb7700,
+                emissiveIntensity: 0.3,
+            });
+            const leaf = new THREE.Mesh(geometry, material);
+            leaf.castShadow = true;
+            leaf.receiveShadow = true;
+            return leaf;
+        }
+
+        // Stem
+        const stemGeo = new THREE.CylinderGeometry(0.06, 0.1, 1.8, 8);
+        const stemMat = new THREE.MeshStandardMaterial({
+            color: 0x55aa33,
+            metalness: 0.2,
+            roughness: 0.7
+        });
+        const stem = new THREE.Mesh(stemGeo, stemMat);
+        stem.position.y = -0.9;
+        cloverGroup.add(stem);
+
+        // 4 leaves
+        const leafPositions = [
+            { angle: 0, x: 0, z: 0.9, rotY: 0, rotX: 0.3 },
+            { angle: Math.PI/2, x: 0.9, z: 0, rotY: Math.PI/2, rotX: 0.3 },
+            { angle: Math.PI, x: 0, z: -0.9, rotY: Math.PI, rotX: 0.3 },
+            { angle: 3*Math.PI/2, x: -0.9, z: 0, rotY: -Math.PI/2, rotX: 0.3 }
+        ];
+        leafPositions.forEach(pos => {
+            const leaf = createLeaf();
+            leaf.position.set(pos.x, 0.4, pos.z);
+            leaf.rotation.y = pos.rotY;
+            leaf.rotation.x = pos.rotX;
+            leaf.rotation.z = 0.2;
+            cloverGroup.add(leaf);
+        });
+
+        // Center jewel
+        const jewelGeo = new THREE.SphereGeometry(0.15, 16, 16);
+        const jewelMat = new THREE.MeshStandardMaterial({
+            color: 0xffaa00,
+            emissive: 0xff8800,
+            emissiveIntensity: 0.8,
+            metalness: 0.9,
+            roughness: 0.1
+        });
+        const jewel = new THREE.Mesh(jewelGeo, jewelMat);
+        jewel.position.set(0, 0.4, 0);
+        cloverGroup.add(jewel);
+
+        cloverGroup.position.y = 0.2;
+        scene.add(cloverGroup);
+
+        // --- 5c. Floating Hearts (3D) ---
+        const hearts = [];
+        function createHeart3D() {
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.bezierCurveTo(0, -0.3, -0.6, -0.5, -0.9, 0);
+            shape.bezierCurveTo(-1.2, 0.5, -0.6, 0.9, 0, 1.6);
+            shape.bezierCurveTo(0.6, 0.9, 1.2, 0.5, 0.9, 0);
+            shape.bezierCurveTo(0.6, -0.5, 0, -0.3, 0, 0);
+            const extrudeSettings = {
+                steps: 1,
+                depth: 0.15,
+                bevelEnabled: true,
+                bevelThickness: 0.1,
+                bevelSize: 0.05,
+                bevelSegments: 3
+            };
+            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            const color = new THREE.Color().setHSL(0.95 + Math.random()*0.1, 0.9, 0.6);
+            const material = new THREE.MeshStandardMaterial({
+                color: color,
+                metalness: 0.2,
+                roughness: 0.3,
+                emissive: color,
+                emissiveIntensity: 0.2
+            });
+            const heart = new THREE.Mesh(geometry, material);
+            heart.scale.set(0.25, 0.25, 0.25);
+            return heart;
+        }
+
+        const heartCount = 12;
+        for (let i = 0; i < heartCount; i++) {
+            const heart = createHeart3D();
+            const angle = (i / heartCount) * Math.PI * 2;
+            const radius = 1.8 + Math.random() * 0.5;
+            heart.userData = {
+                angle: angle,
+                radius: radius,
+                speed: 0.3 + Math.random() * 0.2,
+                offsetY: (Math.random() - 0.5) * 1.5,
+                phase: Math.random() * Math.PI * 2
+            };
+            heart.position.set(
+                Math.cos(angle) * radius,
+                0.4 + Math.sin(angle * 2) * 0.3,
+                Math.sin(angle) * radius
+            );
+            heart.lookAt(0, 0.4, 0);
+            scene.add(heart);
+            hearts.push(heart);
+        }
+
+        // --- 5d. Particle Halo (Books & Stars) ---
+        const haloParticlesGeo = new THREE.BufferGeometry();
+        const haloCount = 800;
+        const haloPositions = new Float32Array(haloCount * 3);
+        const haloColors = new Float32Array(haloCount * 3);
+        const haloSpeeds = new Float32Array(haloCount);
+        const haloPhases = new Float32Array(haloCount);
+        for (let i = 0; i < haloCount; i++) {
+            const radius = 2.2 + Math.random() * 1.5;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+            haloPositions[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+            haloPositions[i*3+1] = radius * Math.sin(phi) * Math.sin(theta) + 0.4;
+            haloPositions[i*3+2] = radius * Math.cos(phi);
+            const col = new THREE.Color().setHSL(0.1 + Math.random()*0.1, 0.8, 0.6);
+            haloColors[i*3] = col.r;
+            haloColors[i*3+1] = col.g;
+            haloColors[i*3+2] = col.b;
+            haloSpeeds[i] = 0.2 + Math.random() * 0.3;
+            haloPhases[i] = Math.random() * Math.PI * 2;
+        }
+        haloParticlesGeo.setAttribute('position', new THREE.BufferAttribute(haloPositions, 3));
+        haloParticlesGeo.setAttribute('color', new THREE.BufferAttribute(haloColors, 3));
+
+        // Create a canvas texture for the particles (tiny books/stars)
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 64, 64);
+        // Draw a tiny book/star shape
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ffd700';
+        ctx.beginPath();
+        ctx.arc(32, 32, 12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffd700';
+        ctx.font = 'bold 24px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('★', 32, 34);
+
+        const particleTexture = new THREE.CanvasTexture(canvas);
+
+        const haloMat = new THREE.PointsMaterial({
+            size: 0.2,
+            map: particleTexture,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            transparent: true,
+            vertexColors: true,
+            opacity: 0.8
+        });
+        const haloPoints = new THREE.Points(haloParticlesGeo, haloMat);
+        scene.add(haloPoints);
+
+        // Store for animation
+        const haloPosAttr = haloParticlesGeo.attributes.position;
+        const initialHaloPos = new Float32Array(haloPosAttr.array);
+
+        // ================================================================
+        // 6. MOUSE PARALLAX (LERP)
+        // ================================================================
+        const mouse = { x: 0, y: 0 };
+        const target = { x: 0, y: 0 };
+
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouse.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+            }
+        }, { passive: true });
+
+        // ================================================================
+        // 7. CLICK / TAP -> CONFETTI + WISH COUNT
+        // ================================================================
+        let wishCount = 0;
+        const wishCounterEl = document.getElementById('wish-count');
+
+        function spawnConfetti(clientX, clientY) {
+            // Increment counter
+            wishCount++;
+            wishCounterEl.textContent = wishCount;
+            // Animate counter pop
+            gsap.fromTo(wishCounterEl, { scale: 1.5, color: '#ffaa00' }, { scale: 1, color: '#ffd700', duration: 0.4, ease: 'back.out(2)' });
+
+            const count = 60;
+            const colors = [0xffd700, 0xff6b6b, 0xff3b8c, 0xffaa00, 0xffffff];
+            const confettiGroup = new THREE.Group();
+
+            for (let i = 0; i < count; i++) {
+                const size = 0.04 + Math.random() * 0.08;
+                const geo = Math.random() > 0.5 ? new THREE.BoxGeometry(size, size*2, size) : new THREE.CircleGeometry(size, 3);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    emissive: 0x444444,
+                    emissiveIntensity: 0.5,
+                    metalness: 0.3,
+                    roughness: 0.4
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                // Position relative to camera view
+                const vec = new THREE.Vector3(
+                    (Math.random() - 0.5) * 2,
+                    (Math.random() - 0.5) * 2,
+                    (Math.random() - 0.5) * 2
+                );
+                // Project to world space roughly
+                mesh.position.copy(vec).add(camera.position).add(new THREE.Vector3(0, -0.5, -2));
+                // Random velocity
+                mesh.userData.vel = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.2,
+                    Math.random() * 0.2 + 0.05,
+                    (Math.random() - 0.5) * 0.2
+                );
+                mesh.userData.life = 1.0;
+                mesh.userData.rotSpeed = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.2,
+                    (Math.random() - 0.5) * 0.2,
+                    (Math.random() - 0.5) * 0.2
+                );
+                confettiGroup.add(mesh);
+            }
+            scene.add(confettiGroup);
+
+            // Animate confetti
+            const duration = 1.8;
+            const startTime = performance.now();
+
+            function animateConfetti(time) {
+                const delta = (time - startTime) / 1000;
+                if (delta > duration) {
+                    scene.remove(confettiGroup);
+                    confettiGroup.children.forEach(child => {
+                        child.geometry.dispose();
+                        child.material.dispose();
+                    });
+                    return;
+                }
+                const progress = delta / duration;
+                confettiGroup.children.forEach(mesh => {
+                    mesh.position.add(mesh.userData.vel);
+                    mesh.userData.vel.y -= 0.008; // gravity
+                    mesh.rotation.x += mesh.userData.rotSpeed.x;
+                    mesh.rotation.y += mesh.userData.rotSpeed.y;
+                    const scale = 1 - progress * 0.8;
+                    mesh.scale.set(scale, scale, scale);
+                    mesh.material.opacity = 1 - progress;
+                    mesh.material.transparent = true;
+                });
+                requestAnimationFrame(animateConfetti);
+            }
+            requestAnimationFrame(animateConfetti);
+        }
+
+        // Global click handler
+        window.addEventListener('click', (e) => {
+            spawnConfetti(e.clientX, e.clientY);
+        });
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                spawnConfetti(touch.clientX, touch.clientY);
+            }
+        }, { passive: true });
+
+        // ================================================================
+        // 8. SCROLL TRIGGER / ANIMATIONS (GSAP)
+        // ================================================================
+        // Refresh ScrollTrigger after layout
+        ScrollTrigger.refresh();
+
+        // Section 1: Typewriter effect (manual)
+        const typewriterText = document.getElementById('typewriter-text');
+        const phrases = [
+            "You are stronger than any exam...",
+            "Luck favors the brave"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let isWaiting = false;
+
+        function typeWriter() {
+            const currentPhrase = phrases[phraseIndex];
+            if (isDeleting) {
+                typewriterText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                if (charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeWriter, 400);
+                    return;
+                }
+                setTimeout(typeWriter, 40);
+            } else {
+                typewriterText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                if (charIndex === currentPhrase.length) {
+                    isDeleting = true;
+                    setTimeout(typeWriter, 2500);
+                    return;
+                }
+                setTimeout(typeWriter, 80);
+            }
+        }
+        setTimeout(typeWriter, 800);
+
+        // Section 2: Glass card & tips
+        const glassCard = document.getElementById('glass-card');
+        const tipItems = document.querySelectorAll('.tip-item');
+
+        ScrollTrigger.create({
+            trigger: '#section-2',
+            start: 'top center',
+            onEnter: () => {
+                glassCard.classList.add('visible');
+                tipItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 200);
+                });
+            },
+            onEnterBack: () => {
+                glassCard.classList.add('visible');
+                tipItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 200);
+                });
+            }
+        });
+
+        // Section 3: Final text
+        const finalText = document.getElementById('final-text');
+        ScrollTrigger.create({
+            trigger: '#section-3',
+            start: 'top center',
+            onEnter: () => {
+                finalText.classList.add('visible');
+            },
+            onEnterBack: () => {
+                finalText.classList.add('visible');
+            }
+        });
+
+        // ================================================================
+        // 9. COUNTDOWN TIMER
+        // ================================================================
+        // *** CHANGE THIS DATE TO YOUR GF'S EXAM DATE ***
+        const examDate = new Date('June 30, 2026 09:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = examDate - now;
+            if (diff <= 0) {
+                document.getElementById('countdown-days').textContent = '0 (GOOD LUCK!)';
+                return;
+            }
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown-days').textContent = days;
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000 * 60 * 60);
+
+        // ================================================================
+        // 10. RESIZE HANDLER
+        // ================================================================
+        window.addEventListener('resize', () => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            composer.setSize(w, h);
+        });
+
+        // ================================================================
+        // 11. ANIMATION LOOP (CINEMATIC)
+        // ================================================================
+        let clock = new THREE.Clock();
+
+        function animate() {
+            const delta = clock.getDelta();
+            const elapsed = clock.getElapsedTime();
+
+            // ---- Parallax (Lerp) ----
+            target.x += (mouse.x - target.x) * 0.05;
+            target.y += (mouse.y - target.y) * 0.05;
+            camera.position.x += (target.x * 0.8 - camera.position.x) * 0.02;
+            camera.position.y += (target.y * 0.5 + 1 - camera.position.y) * 0.02;
+            camera.lookAt(0, 0.4, 0);
+
+            // ---- Rotate Clover ----
+            cloverGroup.rotation.y += 0.005;
+            // Pulsing glow
+            const pulse = Math.sin(elapsed * 1.5) * 0.3 + 0.7;
+            glowLight.intensity = 0.8 + pulse * 0.8;
+
+            // ---- Animate Hearts (Orbit + Wave) ----
+            hearts.forEach((heart, i) => {
+                const data = heart.userData;
+                const angle = data.angle + elapsed * data.speed * 0.4;
+                const radius = data.radius + Math.sin(elapsed * 0.5 + data.phase) * 0.2;
+                heart.position.x = Math.cos(angle) * radius;
+                heart.position.z = Math.sin(angle) * radius;
+                heart.position.y = 0.4 + Math.sin(elapsed * 0.8 + data.phase) * 0.6 + data.offsetY * 0.3;
+                heart.lookAt(0, 0.4, 0);
+                heart.rotation.z = Math.sin(elapsed * 0.5 + i) * 0.1;
+                // Scale pulse
+                const s = 0.25 + Math.sin(elapsed * 1.2 + i) * 0.03;
+                heart.scale.set(s, s, s);
+            });
+
+            // ---- Animate Halo Particles ----
+            const positions = haloParticlesGeo.attributes.position.array;
+            for (let i = 0; i < haloCount; i++) {
+                const i3 = i * 3;
+                const origX = initialHaloPos[i3];
+                const origY = initialHaloPos[i3+1];
+                const origZ = initialHaloPos[i3+2];
+                const phase = haloPhases[i];
+                const speed = haloSpeeds[i];
+                const wave = Math.sin(elapsed * speed + phase) * 0.1;
+                // Move along normal direction slightly
+                const dir = new THREE.Vector3(origX, origY - 0.4, origZ).normalize();
+                positions[i3] = origX + dir.x * wave;
+                positions[i3+1] = origY + dir.y * wave;
+                positions[i3+2] = origZ + dir.z * wave;
+            }
+            haloParticlesGeo.attributes.position.needsUpdate = true;
+
+            // ---- Rotate Stars Background ----
+            stars.rotation.y += 0.0002;
+            stars.rotation.x += 0.0001;
+
+            // ---- Render via Composer ----
+            composer.render();
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // ================================================================
+        // 12. HIDE LOADER
+        // ================================================================
+        setTimeout(() => {
+            document.getElementById('loader').classList.add('hidden');
+        }, 1500);
+
+        // ================================================================
+        // 13. CLEANUP (Optional)
+        // ================================================================
+        // (No cleanup needed for single-page)
+
+        console.log('✨ Magic loaded! Good luck to Aurora! ✨');
+    </script>
+</body>
+</html>
