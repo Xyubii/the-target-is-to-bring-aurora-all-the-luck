@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
 
     <!-- Open Graph for Instagram -->
     <meta property="og:title" content="Good Luck Aurora! You've got this!" />
@@ -19,7 +19,7 @@
     <meta name="twitter:image" content="IMG_3268.jpeg" />
 
     <style>
-        /* ===== RESET & BASE (Pink & White) ===== */
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -140,6 +140,70 @@
             text-align: center;
         }
 
+        /* ===== 3D MOTIVATIONAL MESSAGE OVERLAY ===== */
+        #message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            pointer-events: none;
+            /* We'll enable pointer-events only when active */;
+        }
+        #message-overlay.active {
+            display: flex;
+            pointer-events: auto;
+        }
+        #message-overlay .msg-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(20, 10, 15, 0.3);
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+        }
+        #message-overlay .msg-box {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 60px;
+            padding: 40px 50px;
+            max-width: 90%;
+            box-shadow: 0 30px 100px rgba(255, 20, 147, 0.4), 0 0 80px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            transform-style: preserve-3d;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        #message-overlay .msg-box:hover {
+            transform: scale(1.02) rotateY(2deg) rotateX(2deg);
+        }
+        #message-overlay .msg-text {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            font-size: clamp(1.8rem, 6vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.3;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 20, 147, 0.8), 0 0 60px rgba(255, 20, 147, 0.5), 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        .msg-sub {
+            margin-top: 15px;
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
         /* ===== SECTIONS ===== */
         .section {
             min-height: 100vh;
@@ -247,10 +311,10 @@
             border-radius: 14px;
             display: block;
             background: #ffe4e9;
-            pointer-events: none; /* so click goes to parent */
+            pointer-events: none;
         }
 
-        /* ===== LIGHTBOX (Image Popup) ===== */
+        /* ===== LIGHTBOX ===== */
         .lightbox {
             display: none;
             position: fixed;
@@ -378,6 +442,10 @@
                 right: 25px;
                 font-size: 2.5rem;
             }
+            #message-overlay .msg-box {
+                padding: 30px 25px;
+                border-radius: 40px;
+            }
         }
         @media (max-width: 480px) {
             .section {
@@ -393,6 +461,10 @@
             .lightbox-content {
                 max-width: 95%;
                 max-height: 85%;
+            }
+            #message-overlay .msg-box {
+                padding: 20px 18px;
+                border-radius: 30px;
             }
         }
     </style>
@@ -413,6 +485,15 @@
         <span>♥</span> Lucky clicks: <span id="wish-count">0</span>
     </div>
 
+    <!-- ===== 3D MOTIVATIONAL MESSAGE OVERLAY ===== -->
+    <div id="message-overlay">
+        <div class="msg-backdrop"></div>
+        <div class="msg-box" id="msg-box">
+            <div class="msg-text" id="msg-text">You got this!</div>
+            <div class="msg-sub">✨ Keep going ✨</div>
+        </div>
+    </div>
+
     <!-- ===== CONTENT ===== -->
     <div class="content">
 
@@ -422,7 +503,6 @@
                 <h1 class="hero-title">
                     <span class="highlight" id="typewriter-text"></span><span id="typewriter-cursor"></span>
                 </h1>
-                <!-- removed "Luck favors the brave" subtitle -->
             </div>
             <div class="scroll-down">Scroll down</div>
         </section>
@@ -434,7 +514,6 @@
                     <strong>Sending you pawsitive energy ✨</strong>
                 </div>
                 <div class="gallery-grid" id="gallery-grid">
-                    <!-- All 9 images -->
                     <div class="gallery-item"><img src="IMG_3259.jpeg" alt="Lucky charm" loading="lazy" /></div>
                     <div class="gallery-item"><img src="IMG_3260.jpeg" alt="Lucky charm" loading="lazy" /></div>
                     <div class="gallery-item"><img src="IMG_3261.jpeg" alt="Lucky charm" loading="lazy" /></div>
@@ -492,7 +571,7 @@
         gsap.registerPlugin(ScrollTrigger);
 
         // ============================================================
-        // 2. SCENE, CAMERA, RENDERER (Pink theme)
+        // 2. SCENE, CAMERA, RENDERER
         // ============================================================
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
@@ -551,10 +630,10 @@
         scene.add(glowLight);
 
         // ============================================================
-        // 5. 3D SUSHI (keeping the sushi as requested)
+        // 5. 3D SUSHI
         // ============================================================
 
-        // --- 5a. Background Stars (Pink/White) ---
+        // --- Stars ---
         const starGeo = new THREE.BufferGeometry();
         const starCount = 1800;
         const starPos = new Float32Array(starCount * 3);
@@ -584,7 +663,7 @@
         const stars = new THREE.Points(starGeo, starMat);
         scene.add(stars);
 
-        // --- 5b. Sushi Group ---
+        // --- Sushi Group ---
         const sushiGroup = new THREE.Group();
 
         function createNigiri(colorFish = 0xff8c69, offsetX = 0, offsetZ = 0) {
@@ -673,7 +752,7 @@
         sushiGroup.position.y = 0.0;
         scene.add(sushiGroup);
 
-        // --- 5c. Floating Hearts ---
+        // --- Hearts ---
         const hearts = [];
 
         function createHeart3D() {
@@ -708,7 +787,7 @@
             hearts.push(heart);
         }
 
-        // --- 5d. Particle Halo ---
+        // --- Halo Particles ---
         const haloParticlesGeo = new THREE.BufferGeometry();
         const haloCount = 700;
         const haloPositions = new Float32Array(haloCount * 3);
@@ -782,16 +861,127 @@
         }, { passive: true });
 
         // ============================================================
-        // 7. CLICK -> CONFETTI + LUCKY COUNT
+        // 7. CLICK -> CONFETTI + LUCKY COUNT + MOTIVATIONAL MESSAGES
         // ============================================================
         let wishCount = 0;
         const wishCounterEl = document.getElementById('wish-count');
+        const messageOverlay = document.getElementById('message-overlay');
+        const msgText = document.getElementById('msg-text');
+        const msgBox = document.getElementById('msg-box');
 
+        // List of motivational messages (repeats after list ends)
+        const motivationalMessages = [
+            "you feeling presure? YOU'LL MAKE IT LITTLE ANGEL",
+            "you'll make it baby girl, WISH YOU BEST OF LUCK, YOU'RE GAINING MORE LUCK",
+            "DON'T WORRY, YOU GOT THIS!",
+            "everything will be ok u a diva keep going",
+            "i believe in u ❤️",
+            "YOU'RE GONNA ACE THIS EXAMS!",
+            "Sending you pawsitive energy!"
+        ];
+
+        let isMessageShowing = false;
+        let messageTimeout = null;
+
+        function showMotivationalMessage() {
+            if (isMessageShowing) return;
+            isMessageShowing = true;
+
+            // Determine message index based on current count
+            // First message at 25 (25/25 = 1 -> index 0)
+            const index = (Math.floor(wishCount / 25) - 1) % motivationalMessages.length;
+            const text = motivationalMessages[index];
+
+            msgText.textContent = text;
+
+            // Reset box position and opacity for fresh animation
+            gsap.set(msgBox, {
+                scale: 0.2,
+                rotationY: -90,
+                rotationX: 20,
+                opacity: 0,
+                transformPerspective: 800
+            });
+
+            // Show overlay
+            messageOverlay.classList.add('active');
+
+            // Animate in with 3D cinematic effect
+            const tl = gsap.timeline({
+                defaults: { duration: 0.8, ease: "back.out(2)" }
+            });
+
+            tl.to(msgBox, {
+                scale: 1.1,
+                rotationY: 0,
+                rotationX: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "back.out(2.5)"
+            })
+            .to(msgBox, {
+                scale: 1,
+                duration: 0.3,
+                ease: "power2.out"
+            });
+
+            // Spawn extra confetti burst specifically for the message
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    spawnConfetti(window.innerWidth / 2 + (Math.random() - 0.5) * 300, window.innerHeight / 2 + (Math
+                    .random() - 0.5) * 200);
+                }, i * 200);
+            }
+
+            // Auto-hide after 4 seconds, or on click
+            clearTimeout(messageTimeout);
+            messageTimeout = setTimeout(() => {
+                hideMessage();
+            }, 4500);
+        }
+
+        function hideMessage() {
+            if (!isMessageShowing) return;
+            isMessageShowing = false;
+            clearTimeout(messageTimeout);
+
+            gsap.to(msgBox, {
+                scale: 0.5,
+                rotationY: 60,
+                rotationX: -15,
+                opacity: 0,
+                duration: 0.5,
+                ease: "power3.in",
+                onComplete: () => {
+                    messageOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // Click on message box to dismiss early
+        msgBox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hideMessage();
+        });
+
+        // Click on backdrop to dismiss (but backdrop pointer-events is none, so we handle on overlay)
+        messageOverlay.addEventListener('click', (e) => {
+            if (e.target === messageOverlay || e.target === document.querySelector('.msg-backdrop')) {
+                hideMessage();
+            }
+        });
+
+        // Spawn confetti function (reused from before)
         function spawnConfetti(clientX, clientY) {
             wishCount++;
             wishCounterEl.textContent = wishCount;
             gsap.fromTo(wishCounterEl, { scale: 1.5, color: '#ff1493' }, { scale: 1, color: '#ff1493', duration: 0.4,
                 ease: 'back.out(2)' });
+
+            // Check for motivational message trigger (every 25 clicks)
+            if (wishCount % 25 === 0 && wishCount > 0) {
+                showMotivationalMessage();
+            }
 
             const count = 60;
             const colors = [0xffb6c1, 0xff69b4, 0xff1493, 0xffd700, 0xffffff];
@@ -860,9 +1050,14 @@
         }
 
         window.addEventListener('click', (e) => {
+            // Only trigger if not clicking on lightbox or message box (handled separately)
+            if (lightbox.classList.contains('active')) return;
+            if (messageOverlay.classList.contains('active')) return;
             spawnConfetti(e.clientX, e.clientY);
         });
         window.addEventListener('touchstart', (e) => {
+            if (lightbox.classList.contains('active')) return;
+            if (messageOverlay.classList.contains('active')) return;
             if (e.touches.length > 0) {
                 spawnConfetti(e.touches[0].clientX, e.touches[0].clientY);
             }
@@ -873,7 +1068,7 @@
         // ============================================================
         ScrollTrigger.refresh();
 
-        // Typewriter (3 lines)
+        // Typewriter
         const typewriterText = document.getElementById('typewriter-text');
         const phrases = [
             "you got this baby girl",
@@ -912,7 +1107,7 @@
         }
         setTimeout(typeWriter, 800);
 
-        // Gallery header & grid
+        // Gallery
         const galleryHeader = document.getElementById('gallery-header');
         const galleryGrid = document.getElementById('gallery-grid');
 
@@ -943,29 +1138,25 @@
         });
 
         // ============================================================
-        // 9. LIGHTBOX (Image zoom on click) - FIXED
+        // 9. LIGHTBOX
         // ============================================================
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightboxClose = document.getElementById('lightbox-close');
 
-        // Use event delegation on the grid to handle clicks on .gallery-item
         galleryGrid.addEventListener('click', (e) => {
             const item = e.target.closest('.gallery-item');
             if (!item) return;
             const img = item.querySelector('img');
             if (!img) return;
-            // Open lightbox
             lightboxImg.src = img.src;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
 
-        // Close lightbox functions
         function closeLightbox() {
             lightbox.classList.remove('active');
             document.body.style.overflow = 'auto';
-            // Reset src after transition to avoid flicker
             setTimeout(() => {
                 if (!lightbox.classList.contains('active')) {
                     lightboxImg.src = '';
@@ -979,11 +1170,10 @@
                 closeLightbox();
             }
         });
-
-        // Close on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
+                hideMessage();
             }
         });
 
@@ -1008,20 +1198,17 @@
             const delta = clock.getDelta();
             const elapsed = clock.getElapsedTime();
 
-            // Parallax
             target.x += (mouse.x - target.x) * 0.05;
             target.y += (mouse.y - target.y) * 0.05;
             camera.position.x += (target.x * 0.8 - camera.position.x) * 0.02;
             camera.position.y += (target.y * 0.5 + 1 - camera.position.y) * 0.02;
             camera.lookAt(0, 0.4, 0);
 
-            // Sushi
             sushiGroup.rotation.y += 0.003;
             sushiGroup.position.y = Math.sin(elapsed * 0.3) * 0.05;
             const pulse = Math.sin(elapsed * 1.5) * 0.3 + 0.7;
             glowLight.intensity = 0.8 + pulse * 0.8;
 
-            // Hearts
             hearts.forEach((heart, i) => {
                 const data = heart.userData;
                 const angle = data.angle + elapsed * data.speed * 0.4;
@@ -1035,7 +1222,6 @@
                 heart.scale.set(s, s, s);
             });
 
-            // Halo
             const positions = haloParticlesGeo.attributes.position.array;
             for (let i = 0; i < haloCount; i++) {
                 const i3 = i * 3;
